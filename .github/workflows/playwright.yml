@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -23,16 +22,14 @@ jobs:
       run: npx playwright install
 
     - name: Run Playwright tests
-      
       run: |
         $env:ENV="test"
         npx playwright test --timeout=120000
       shell: pwsh
 
-  
     - name: Upload test artifacts on failure
       if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: playwright-artifacts
         path: |
