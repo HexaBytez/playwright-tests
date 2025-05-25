@@ -77,6 +77,10 @@ export class SubscriptionsPage {
     return this.currentPage.locator(`//span[contains(text(),'АО "ТБАНК"')]`);
   }
 
+  get sortingByNameInTable(): Locator {
+    return this.currentPage.locator('div.ui-table-head-title[title="Дата создания"]');
+  }
+
   get checkUpdatedDataCase(): Locator {
     return this.currentPage.getByText('Данные обновлены');
   }
@@ -171,6 +175,13 @@ export class SubscriptionsPage {
 
     await newPage.waitForLoadState();
     await newPage.close();
+  }
+
+  async sortingActualyData() {
+    await this.sortingByNameInTable.waitFor();
+    await this.sortingByNameInTable.click();
+    await this.sortingByNameInTable.click();
+
   }
 
   async caseNameInTable(name: string) {

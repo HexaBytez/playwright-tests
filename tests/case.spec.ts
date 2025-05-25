@@ -50,6 +50,7 @@ test.describe.parallel('Subscriptions tests', () => {
       await subscriptionsPage.nameModalFieldFill(uniqueName);
       await subscriptionsPage.caseTypeFieldModalFill(caseData.projectType);
       await subscriptionsPage.clickSubmitButtonModal();
+      await subscriptionsPage.sortingActualyData();
       await subscriptionsPage.caseNameInTable(uniqueName);
       await subscriptionsPage.openCreatedCase(uniqueName);
     });
