@@ -40,12 +40,12 @@
 
 - Запуск всех тестов:
   ```bash
-  npx playwright test
+  $env:ENV="test"; npx playwright test
   ```
 
 - Запуск конкретного теста или тестового файла:
   ```bash
-  npx playwright test tests/example.spec.ts
+  $env:ENV="test"; npx playwright test tests/example.spec.ts
   ```
 
 - Запуск с отчетом в браузере (HTML-отчет):
