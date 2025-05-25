@@ -307,20 +307,57 @@ export class SubscriptionsPage {
   }
 
   async popupFieldsCase() {
-    await this.popupNameCase.waitFor();
-    await expect(this.popupNameCase).toHaveValue('Поставлено на мониторинг');
-    await expect(this.popupFullDayCase).toBeChecked();
+  await this.popupNameCase.waitFor();
+  await expect(this.popupNameCase).toHaveValue('Поставлено на мониторинг');
+  await expect(this.popupFullDayCase).toBeChecked();
 
-    const value = await this.currentPage.locator(`//input[@placeholder='Дата начала']`).inputValue();
+  const value = await this.currentPage.locator('[placeholder="Дата начала"]').inputValue();
+  const now = new Date();
+  const expectedDate = now.toLocaleDateString('ru-RU');
 
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
-    const expectedDate = `${day}.${month}.${year}`;
-
-    if (value !== expectedDate) {
-      throw new Error(`Expected date: ${expectedDate}, in field: ${value}`);
-    }
+  expect(value).toBe(expectedDate);
   }
+
+//   async archiveAndDeleteCurrentCase() {
+  
+//   const url = this.currentPage.url();
+//   const match = url.match(/\/case\/([^/]+)\/events/);
+//   if (!match) throw new Error('UUID project does not found');
+
+//   const uuid = match[1];
+//   const cookies = await this.currentPage.context().cookies();
+//   const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+
+//   const archiveStatus = await this.currentPage.evaluate(async ({ uuid, cookieHeader }) => {
+//     const response = await fetch('https://test-aqa.demo.case.one/api/ProjectAction/ArchiveBulkProject', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Cookie': cookieHeader,
+//       },
+//       body: JSON.stringify({ ProjectIds: [uuid] })
+//     });
+//     return response.status;
+//   }, { uuid, cookieHeader });
+
+//   if (archiveStatus !== 200) {
+//     throw new Error(`Archivate error ${uuid}, status: ${archiveStatus}`);
+//   }
+
+//   const deleteStatus = await this.currentPage.evaluate(async ({ uuid, cookieHeader }) => {
+//     const response = await fetch(`https://test-aqa.demo.case.one/api/Projects/${uuid}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Cookie': cookieHeader,
+//       }
+//     });
+//     return response.status;
+//   }, { uuid, cookieHeader });
+
+//   if (deleteStatus !== 200) {
+//     throw new Error(`Delete error ${uuid}, status: ${deleteStatus}`);
+//   }
+
+//   console.log(`Project ${uuid} sucsessful archivated and deleted.`);
+// }
 }

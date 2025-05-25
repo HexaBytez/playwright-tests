@@ -91,6 +91,7 @@ test.describe.parallel('Subscriptions tests', () => {
       await subscriptionsPage.eventOnTheListCase();
       await subscriptionsPage.redirectOnModalFullEvent();
       await subscriptionsPage.popupFieldsCase();
+      //await subscriptionsPage.archiveAndDeleteCurrentCase();
     });
   });
 });
