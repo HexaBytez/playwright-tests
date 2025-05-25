@@ -1,0 +1,10 @@
+{
+    "admin_login": {
+        "login": "dawn87@cancer-treatment.xyz",
+        "userpassword": "@test123"
+    },
+     "admin_incorrect_login_and_password": {
+        "login": "example",
+        "userpassword": "example"
+    }
+}
