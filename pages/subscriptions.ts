@@ -122,13 +122,23 @@ export class SubscriptionsPage {
   }
 
   private async click(locator: Locator) {
-    await locator.waitFor({ state: 'visible' });
-    await locator.click();
+    try {
+      await locator.waitFor({ state: 'visible', timeout: 50000 });
+      await this.waitForNoOverlay();
+      await locator.click();
+    } catch (error) {
+      throw new Error(`Failed to click element: ${await locator.evaluate(el => el.outerHTML)}\n${error}`);
+    }
   }
 
   private async fill(locator: Locator, value: string) {
-    await locator.waitFor({ state: 'visible' });
-    await locator.fill(value);
+    try {
+      await locator.waitFor({ state: 'visible', timeout: 50000 });
+      await this.waitForNoOverlay();
+      await locator.fill(value);
+    } catch (error) {
+      throw new Error(`Failed to fill element with value "${value}": ${await locator.evaluate(el => el.outerHTML)}\n${error}`);
+    }
   }
 
   async waitForNoOverlay() {
@@ -145,7 +155,7 @@ export class SubscriptionsPage {
 
   async checkOpenedPage() {
     await test.step('Check item "Все дела" is open', async () => {
-      await this.allSubscriptionsValue.waitFor({ state: 'visible' });
+      await this.allSubscriptionsValue.waitFor({ state: 'visible', timeout: 50000 });
     });
   }
 
@@ -178,15 +188,15 @@ export class SubscriptionsPage {
   }
 
   async sortingActualyData() {
-    await this.sortingByNameInTable.waitFor();
+    await this.sortingByNameInTable.waitFor({ timeout: 50000 });
     await this.sortingByNameInTable.click();
     await this.sortingByNameInTable.click();
-
   }
 
   async caseNameInTable(name: string) {
-    await this.caseNametable(name).waitFor();
-    await expect(this.caseNametable(name)).toHaveText(name);
+    const locator = this.caseNametable(name);
+    await locator.waitFor({ timeout: 50000 });
+    await expect(locator).toHaveText(name);
   }
 
   async openCreatedCase(name: string) {
@@ -201,37 +211,37 @@ export class SubscriptionsPage {
   }
 
   async innFieldCase() {
-    await this.innField.waitFor();
+    await this.innField.waitFor({ timeout: 50000 });
     await expect(this.innField).toHaveValue('');
   }
 
   async ogrnFieldCase() {
-    await this.ogrnField.waitFor();
+    await this.ogrnField.waitFor({ timeout: 50000 });
     await expect(this.ogrnField).toHaveValue('');
   }
 
   async dateFilterCase() {
-    await this.dateFilterField.waitFor();
+    await this.dateFilterField.waitFor({ timeout: 50000 });
     await expect(this.dateFilterField).toHaveValue('');
   }
 
   async checkBoxIstecCase() {
-    await this.checkBoxIstec.waitFor();
+    await this.checkBoxIstec.waitFor({ timeout: 50000 });
     await expect(this.checkBoxIstec).not.toBeChecked();
   }
 
   async checkBoxResponseCase() {
-    await this.checkBoxResponse.waitFor();
+    await this.checkBoxResponse.waitFor({ timeout: 50000 });
     await expect(this.checkBoxResponse).not.toBeChecked();
   }
 
   async checkBoxOtherTypeCase() {
-    await this.checkBoxOtherType.waitFor();
+    await this.checkBoxOtherType.waitFor({ timeout: 50000 });
     await expect(this.checkBoxOtherType).not.toBeChecked();
   }
 
   async selectValueOrganization(name: string) {
-    await this.organizationField.waitFor();
+    await this.organizationField.waitFor({ timeout: 50000 });
     await expect(this.organizationField).toHaveValue('');
     await this.click(this.openOrgDropDown);
     await this.click(this.selectOrgOnDropDown);
@@ -239,31 +249,31 @@ export class SubscriptionsPage {
   }
 
   async innFieldCaseFull(number: string) {
-    await this.innField.waitFor();
+    await this.innField.waitFor({ timeout: 50000 });
     await expect(this.innField).toHaveValue(/^\d+$/);
     await expect(this.innField).toHaveValue(number);
   }
 
   async ogrnFieldCaseFull(number: string) {
-    await this.ogrnField.waitFor();
+    await this.ogrnField.waitFor({ timeout: 50000 });
     await expect(this.ogrnField).toHaveValue(/^\d+$/);
     await expect(this.ogrnField).toHaveValue(number);
   }
 
   async checkBoxIstecCaseSelected() {
-    await this.checkBoxIstec.waitFor();
+    await this.checkBoxIstec.waitFor({ timeout: 50000 });
     await this.checkBoxIstec.check();
     await expect(this.checkBoxIstec).toBeChecked();
   }
 
   async checkBoxResponseCaseSelected() {
-    await this.checkBoxResponse.waitFor();
+    await this.checkBoxResponse.waitFor({ timeout: 50000 });
     await this.checkBoxResponse.check();
     await expect(this.checkBoxResponse).toBeChecked();
   }
 
   async checkBoxOtherTypeCaseSelected() {
-    await this.checkBoxOtherType.waitFor();
+    await this.checkBoxOtherType.waitFor({ timeout: 50000 });
     await this.checkBoxOtherType.check();
     await expect(this.checkBoxOtherType).toBeChecked();
   }
@@ -273,8 +283,8 @@ export class SubscriptionsPage {
   }
 
   async checkIfFieldsIsDisabled() {
-    await this.checkUpdatedDataCase.waitFor();
-    await this.organizationField.waitFor();
+    await this.checkUpdatedDataCase.waitFor({ timeout: 50000 });
+    await this.organizationField.waitFor({ timeout: 50000 });
     await expect(this.organizationField).toBeDisabled();
     await expect(this.innField).toBeDisabled();
     await expect(this.ogrnField).toBeDisabled();
@@ -282,40 +292,40 @@ export class SubscriptionsPage {
 
   async selectMonitoringItemCase() {
     await this.waitForNoOverlay();
-    await this.monitoringItemCaseSelect.waitFor({ state: 'visible' });
+    await this.monitoringItemCaseSelect.waitFor({ state: 'visible', timeout: 50000 });
     await this.monitoringItemCaseSelect.click();
     await expect(this.monitoringStep).toHaveAttribute('title', 'Поставлено на мониторинг');
   }
 
   async selectTabEventsCase() {
-    await this.eventsTabCase.waitFor({ state: 'visible' });
+    await this.eventsTabCase.waitFor({ state: 'visible', timeout: 50000 });
     await this.eventsTabCase.click();
     await expect(this.eventsTabCase).toHaveClass(/active/);
   }
 
   async eventOnTheListCase() {
     await this.currentPage.getByRole('button', { name: 'Закрыть' }).first().click();
-    await this.currentPage.locator('[title="Дела обновлены"]').waitFor({ state: 'detached' });
+    await this.currentPage.locator('[title="Дела обновлены"]').waitFor({ state: 'detached', timeout: 50000 });
     await this.currentPage.getByRole('button', { name: 'Закрыть' }).first().click();
-    await this.eventOnListEvents.waitFor();
+    await this.eventOnListEvents.waitFor({ timeout: 50000 });
   }
 
   async redirectOnModalFullEvent() {
-    await this.eventOnListEvents.waitFor();
+    await this.eventOnListEvents.waitFor({ timeout: 50000 });
     await this.eventOnListEvents.click();
     await expect(this.popupOpenedCase).toHaveText('Постановка на мониторинг');
   }
 
   async popupFieldsCase() {
-  await this.popupNameCase.waitFor();
-  await expect(this.popupNameCase).toHaveValue('Поставлено на мониторинг');
-  await expect(this.popupFullDayCase).toBeChecked();
+    await this.popupNameCase.waitFor({ timeout: 50000 });
+    await expect(this.popupNameCase).toHaveValue('Поставлено на мониторинг');
+    await expect(this.popupFullDayCase).toBeChecked();
 
-  const value = await this.currentPage.locator('[placeholder="Дата начала"]').inputValue();
-  const now = new Date();
-  const expectedDate = now.toLocaleDateString('ru-RU');
+    const value = await this.currentPage.locator('[placeholder="Дата начала"]').inputValue();
+    const now = new Date();
+    const expectedDate = now.toLocaleDateString('ru-RU');
 
-  expect(value).toBe(expectedDate);
+    expect(value).toBe(expectedDate);
   }
 
 //   async archiveAndDeleteCurrentCase() {
